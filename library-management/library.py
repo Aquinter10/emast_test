@@ -39,8 +39,9 @@ class Library:
         if not self.borrowed_items:
             return "No items have been borrowed."
         item_counts = {}
-        for item in self.borrowed_items.values():
-            title = item.get_details()['title']
+        for item in self.borrowed_items:
+            
+            title = gettitle(item.get_details())
             item_counts[title] = item_counts.get(title, 0) + 1
         most_borrowed = max(item_counts, key=item_counts.get)
         return f"The most borrowed item is '{most_borrowed}'."
