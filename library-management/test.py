@@ -25,3 +25,31 @@ for item in library.list_borrowed_items():
 
 print("\nMost Borrowed Item:")
 print(library.most_borrowed_item())
+
+from database import connect_db, create_tables
+
+def add_book_to_db(title, type_):
+    conn = connect_db()
+    cursor = conn.cursor()
+    cursor.execute(
+        "INSERT INTO items (title, type, is_borrowed, borrow_count) VALUES (?, ?, ?, ?)",
+        (title, type_, 0, 0)
+    )
+    conn.commit()
+    conn.close()
+
+def list_books_from_db():
+    conn = connect_db()
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM items")
+    items = cursor.fetchall()
+    conn.close()
+    return items
+
+if __name__ == "__main__":
+    create_tables()
+    add_book_to_db("The Great Gatsby", "Book")
+    add_book_to_db("1984", "Book")
+    print("Books in database:")
+    for item in list_books_from_db():
+        print(item)
